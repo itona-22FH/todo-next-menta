@@ -7,9 +7,9 @@ import { SetStateAction, useEffect, useState } from "react";
 
 export default function Home() {
   const [todo, setTodo] = useState("");
-  const [sortedTodo, setSortedTodo] = useState<todosType[]>([]);
+  const [sortedTodos, setSortedTodos] = useState<Todo[]>([]);
 
-  type todosType = {
+  type Todo = {
     inputText: string;
     id: string;
     checked: boolean;
@@ -24,12 +24,21 @@ export default function Home() {
 
   const handleFormSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    setSortedTodo([
+    setSortedTodos([
       { id: uuidv4(), inputText: todo.trim(), edit: false, checked: false },
-      ...sortedTodo,
+      ...sortedTodos,
     ]);
     setTodo("");
-    console.log(sortedTodo);
+    console.log(sortedTodos);
+  };
+
+  const handleDeleteTodo = (id: string) => {
+    const newTodos = sortedTodos.filter((todo) => {
+      if (todo.id !== id) {
+        return todo;
+      }
+    });
+    setSortedTodos(newTodos);
   };
 
   return (
@@ -52,9 +61,20 @@ export default function Home() {
           <button type="submit">タスク追加</button>
         </form>
 
-        <ul>
-          {sortedTodo.map((todo) => {
-            return <li key={todo.id}>{todo.inputText}</li>;
+        <ul style={{ listStyle: "none" }}>
+          {sortedTodos.map((todo) => {
+            return (
+              <li key={todo.id}>
+                {todo.inputText}
+                <button
+                  onClick={() => {
+                    handleDeleteTodo(todo.id);
+                  }}
+                >
+                  削除
+                </button>
+              </li>
+            );
           })}
         </ul>
 
