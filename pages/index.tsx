@@ -11,7 +11,8 @@ import { TodoForm } from "./components/TodoForm";
 export default function Home() {
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [editId, setEditId] = useState("");
+  const [editTodoId, setEditTodoId] = useState("");
+  const [editTodoText, setEditTodoText] = useState("");
 
   type Todo = {
     inputText: string;
@@ -33,7 +34,6 @@ export default function Home() {
       ...todos,
     ]);
     setTodo("");
-    console.log(todos);
   };
 
   const handleDeleteTodo = (id: string) => {
@@ -45,7 +45,7 @@ export default function Home() {
     setTodos(newTodos);
   };
 
-  const handleOnCheck = (id: string, checked: boolean) => {
+  const handleCheckTodo = (id: string, checked: boolean) => {
     const newTodos = todos.map((todo) => {
       if (todo.id === id) {
         todo.checked = !checked;
@@ -54,6 +54,18 @@ export default function Home() {
     });
 
     setTodos(newTodos);
+  };
+
+  const handleEditTodo = (id: string) => {
+    const newTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        todo.inputText = editTodoText;
+      }
+      return todo;
+    });
+    setTodos(newTodos);
+    setEditTodoId("");
+    setEditTodoText("");
   };
 
   return (
@@ -71,16 +83,18 @@ export default function Home() {
           handleFormSubmit={handleFormSubmit}
           handleInputTodo={handleInputTodo}
         />
-
         <ul style={{ listStyle: "none" }}>
           <ShowTodoList
             todoArray={todos}
             handleDeleteTodo={handleDeleteTodo}
-            handleOnCheck={handleOnCheck}
-            setEditId={setEditId}
+            handleCheckTodo={handleCheckTodo}
+            handleEditTodo={handleEditTodo}
+            editTodoId={editTodoId}
+            editTodoText={editTodoText}
+            setEditTodoId={setEditTodoId}
+            setEditTodoText={setEditTodoText}
           />
         </ul>
-
         <div>
           <LinkButton url="/completeTodo" text="完了タスク一覧" />
           <LinkButton url="/notCompleteTodo" text="未完了タスク一覧" />
