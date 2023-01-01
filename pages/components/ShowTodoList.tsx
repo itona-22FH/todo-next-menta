@@ -1,14 +1,14 @@
 import React from "react";
 
 export const ShowTodoList = (props: {
-  todoList: any;
+  todoArray: any;
   handleDeleteTodo: any;
   handleOnCheck: any;
 }) => {
   const { todoArray, handleDeleteTodo, handleOnCheck } = props;
   return (
     <>
-      {todoList.map(
+      {todoArray.map(
         (todo: {
           id: React.Key | null | undefined;
           inputText:
