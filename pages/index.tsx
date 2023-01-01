@@ -7,7 +7,7 @@ import { SetStateAction, useEffect, useState } from "react";
 
 export default function Home() {
   const [todo, setTodo] = useState("");
-  const [sortedTodos, setSortedTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   type Todo = {
     inputText: string;
@@ -24,32 +24,32 @@ export default function Home() {
 
   const handleFormSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    setSortedTodos([
+    setTodos([
       { id: uuidv4(), inputText: todo.trim(), edit: false, checked: false },
-      ...sortedTodos,
+      ...todos,
     ]);
     setTodo("");
-    console.log(sortedTodos);
+    console.log(todos);
   };
 
   const handleDeleteTodo = (id: string) => {
-    const newTodos = sortedTodos.filter((todo) => {
+    const newTodos = todos.filter((todo) => {
       if (todo.id !== id) {
         return todo;
       }
     });
-    setSortedTodos(newTodos);
+    setTodos(newTodos);
   };
 
   const handleOnCheck = (id: string, checked: boolean) => {
-    const newTodos = sortedTodos.map((todo) => {
+    const newTodos = todos.map((todo) => {
       if (todo.id === id) {
         todo.checked = !checked;
       }
       return todo;
     });
 
-    setSortedTodos(newTodos);
+    setTodos(newTodos);
   };
 
   return (
@@ -73,7 +73,7 @@ export default function Home() {
         </form>
 
         <ul style={{ listStyle: "none" }}>
-          {sortedTodos.map((todo) => {
+          {todos.map((todo) => {
             return (
               <li key={todo.id}>
                 {todo.inputText}
