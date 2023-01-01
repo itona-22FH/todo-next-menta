@@ -4,6 +4,8 @@ import styles from "../styles/Home.module.css";
 import { v4 as uuidv4 } from "uuid";
 import Link from "next/link";
 import { SetStateAction, useEffect, useState } from "react";
+import { LinkButton } from "./components/LinkButton";
+import { ShowTodoList } from "./components/ShowTodoList";
 
 export default function Home() {
   const [todo, setTodo] = useState("");
@@ -73,36 +75,16 @@ export default function Home() {
         </form>
 
         <ul style={{ listStyle: "none" }}>
-          {todos.map((todo) => {
-            return (
-              <li key={todo.id}>
-                {todo.inputText}
-                <button
-                  onClick={() => {
-                    handleDeleteTodo(todo.id);
-                  }}
-                >
-                  削除
-                </button>
-                <input
-                  type="checkbox"
-                  checked={todo.checked}
-                  onChange={() => {
-                    handleOnCheck(todo.id, todo.checked);
-                  }}
-                ></input>
-              </li>
-            );
-          })}
+          <ShowTodoList
+            todoList={todos}
+            handleDeleteTodo={handleDeleteTodo}
+            handleOnCheck={handleOnCheck}
+          />
         </ul>
 
         <div>
-          <button>
-            <Link href="/completeTodo">完了したタスク一覧</Link>
-          </button>
-          <button>
-            <Link href="/notCompleteTodo">未完了のタスク一覧</Link>
-          </button>
+          <LinkButton url="/completeTodo" />
+          <LinkButton url="/notCompleteTodo" />
         </div>
       </main>
     </div>
