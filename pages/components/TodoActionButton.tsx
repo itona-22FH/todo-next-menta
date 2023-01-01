@@ -2,14 +2,14 @@ import React from "react";
 
 export const TodoActionButton = (props: {
   id: any;
-  handleDeleteTodo: any;
+  handle: any;
   text: any;
 }) => {
-  const { id, handleDeleteTodo, text } = props;
+  const { id, handle, text} = props;
   return (
     <button
       onClick={() => {
-        handleDeleteTodo(id);
+        handle(id);
       }}
     >
       {text}
