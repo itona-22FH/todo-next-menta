@@ -1,4 +1,5 @@
 import React from "react";
+import { TodoActionButton } from "./TodoActionButton";
 
 export const ShowTodoList = (props: {
   todoArray: any;
@@ -25,13 +26,11 @@ export const ShowTodoList = (props: {
           return (
             <li key={todo.id}>
               {todo.inputText}
-              <button
-                onClick={() => {
-                  handleDeleteTodo(todo.id);
-                }}
-              >
-                削除
-              </button>
+              <TodoActionButton
+                id={todo.id}
+                text="削除"
+                handleDeleteTodo={handleDeleteTodo}
+              />
               <input
                 type="checkbox"
                 checked={todo.checked}
