@@ -41,6 +41,17 @@ export default function Home() {
     setSortedTodos(newTodos);
   };
 
+  const handleOnCheck = (id: string, checked: boolean) => {
+    const newTodos = sortedTodos.map((todo) => {
+      if (todo.id === id) {
+        todo.checked = !checked;
+      }
+      return todo;
+    });
+
+    setSortedTodos(newTodos);
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -73,6 +84,13 @@ export default function Home() {
                 >
                   削除
                 </button>
+                <input
+                  type="checkbox"
+                  checked={todo.checked}
+                  onChange={() => {
+                    handleOnCheck(todo.id, todo.checked);
+                  }}
+                ></input>
               </li>
             );
           })}
