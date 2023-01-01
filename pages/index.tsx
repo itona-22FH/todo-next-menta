@@ -6,6 +6,7 @@ import Link from "next/link";
 import { SetStateAction, useEffect, useState } from "react";
 import { LinkButton } from "./components/LinkButton";
 import { ShowTodoList } from "./components/ShowTodoList";
+import { TodoForm } from "./components/TodoForm";
 
 export default function Home() {
   const [todo, setTodo] = useState("");
@@ -64,15 +65,11 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1>TODOリスト</h1>
-        <form onSubmit={handleFormSubmit}>
-          <input
-            type="text"
-            value={todo}
-            name="todo"
-            onChange={handleInputTodo}
-          ></input>
-          <button type="submit">タスク追加</button>
-        </form>
+        <TodoForm
+          todo={todo}
+          handleFormSubmit={handleFormSubmit}
+          handleInputTodo={handleInputTodo}
+        />
 
         <ul style={{ listStyle: "none" }}>
           <ShowTodoList
