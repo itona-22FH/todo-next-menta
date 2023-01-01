@@ -5,7 +5,7 @@ export const ShowTodoList = (props: {
   handleDeleteTodo: any;
   handleOnCheck: any;
 }) => {
-  const { todoList, handleDeleteTodo, handleOnCheck } = props;
+  const { todoArray, handleDeleteTodo, handleOnCheck } = props;
   return (
     <>
       {todoList.map(

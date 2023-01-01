@@ -76,7 +76,7 @@ export default function Home() {
 
         <ul style={{ listStyle: "none" }}>
           <ShowTodoList
-            todoList={todos}
+            todoArray={todos}
             handleDeleteTodo={handleDeleteTodo}
             handleOnCheck={handleOnCheck}
           />
