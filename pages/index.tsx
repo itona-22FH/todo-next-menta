@@ -83,8 +83,8 @@ export default function Home() {
         </ul>
 
         <div>
-          <LinkButton url="/completeTodo" />
-          <LinkButton url="/notCompleteTodo" />
+          <LinkButton url="/completeTodo" text="完了タスク一覧" />
+          <LinkButton url="/notCompleteTodo" text="未完了タスク一覧" />
         </div>
       </main>
     </div>
