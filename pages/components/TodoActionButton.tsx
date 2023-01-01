@@ -1,15 +1,16 @@
 import React from "react";
 
-export const TodoActionButton = (props: {
-  id: any;
-  handle: any;
-  text: any;
-}) => {
-  const { id, handle, text} = props;
+type Props = {
+  id: string;
+  handleOnClick: (id: string) => void;
+  text: string;
+};
+
+export const TodoActionButton = ({ id, handleOnClick, text }: Props) => {
   return (
     <button
       onClick={() => {
-        handle(id);
+        handleOnClick(id);
       }}
     >
       {text}
