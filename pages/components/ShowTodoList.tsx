@@ -5,8 +5,9 @@ export const ShowTodoList = (props: {
   todoArray: any;
   handleDeleteTodo: any;
   handleOnCheck: any;
+  setEditId: any;
 }) => {
-  const { todoArray, handleDeleteTodo, handleOnCheck } = props;
+  const { todoArray, handleDeleteTodo, handleOnCheck, setEditId } = props;
   return (
     <>
       {todoArray.map(
@@ -29,8 +30,9 @@ export const ShowTodoList = (props: {
               <TodoActionButton
                 id={todo.id}
                 text="削除"
-                handleDeleteTodo={handleDeleteTodo}
+                handle={handleDeleteTodo}
               />
+              <TodoActionButton id={todo.id} text="編集" handle={setEditId} />
               <input
                 type="checkbox"
                 checked={todo.checked}
