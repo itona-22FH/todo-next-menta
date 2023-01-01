@@ -11,6 +11,7 @@ import { TodoForm } from "./components/TodoForm";
 export default function Home() {
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [editId, setEditId] = useState("");
 
   type Todo = {
     inputText: string;
@@ -76,6 +77,7 @@ export default function Home() {
             todoArray={todos}
             handleDeleteTodo={handleDeleteTodo}
             handleOnCheck={handleOnCheck}
+            setEditId={setEditId}
           />
         </ul>
 
