@@ -12,29 +12,39 @@ type Props = {
   todoArray: Todo[];
   handleDeleteTodo: (id: string) => void;
   handleCheckTodo: (id: string, checked: boolean) => void;
+  handleUpdateTodo: (id: string) => void;
   handleEditTodo: (id: string) => void;
-  editTodoId: string;
+  handleUpdateBtnDisabled: (todoArray: Todo[]) => boolean;
+  handleEditBtnDisabled: (todoArray: Todo[]) => boolean;
   editTodoText: string;
   setEditTodoText: Dispatch<SetStateAction<string>>;
-  setEditTodoId: Dispatch<SetStateAction<string>>;
 };
 
 export const ShowTodoList = ({
   todoArray,
   handleDeleteTodo,
   handleCheckTodo,
+  handleUpdateTodo,
   handleEditTodo,
-  editTodoId,
+  handleUpdateBtnDisabled,
+  handleEditBtnDisabled,
   editTodoText,
-  setEditTodoId,
   setEditTodoText,
 }: Props) => {
   return (
     <>
       {todoArray.map((todo) => (
         <li key={todo.id}>
+          <input
+            type="checkbox"
+            checked={todo.checked}
+            disabled={handleEditBtnDisabled(todoArray)}
+            onChange={() => {
+              handleCheckTodo(todo.id, todo.checked);
+            }}
+          ></input>
           {todo.inputText}
-          {todo.id === editTodoId ? (
+          {todo.edit ? (
             <>
               <input
                 type="text"
@@ -44,8 +54,10 @@ export const ShowTodoList = ({
               />
               <TodoActionButton
                 id={todo.id}
-                handleOnClick={handleEditTodo}
+                handleOnClick={handleUpdateTodo}
                 text="再投稿"
+                todoArray={todoArray}
+                handleDisabled={handleUpdateBtnDisabled}
               />
             </>
           ) : (
@@ -54,19 +66,16 @@ export const ShowTodoList = ({
                 id={todo.id}
                 text="削除"
                 handleOnClick={handleDeleteTodo}
+                todoArray={todoArray}
+                handleDisabled={handleEditBtnDisabled}
               />
               <TodoActionButton
                 id={todo.id}
                 text="編集"
-                handleOnClick={setEditTodoId}
+                handleOnClick={handleEditTodo}
+                todoArray={todoArray}
+                handleDisabled={handleEditBtnDisabled}
               />
-              <input
-                type="checkbox"
-                checked={todo.checked}
-                onChange={() => {
-                  handleCheckTodo(todo.id, todo.checked);
-                }}
-              ></input>
             </>
           )}
         </li>
