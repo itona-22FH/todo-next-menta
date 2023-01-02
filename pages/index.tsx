@@ -11,7 +11,6 @@ import { TodoForm } from "./components/TodoForm";
 export default function Home() {
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [editTodoId, setEditTodoId] = useState("");
   const [editTodoText, setEditTodoText] = useState("");
 
   type Todo = {
@@ -56,17 +55,41 @@ export default function Home() {
     setTodos(newTodos);
   };
 
-  const handleEditTodo = (id: string) => {
+  const handleUpdateTodo = (id: string) => {
     const newTodos = todos.map((todo) => {
       if (todo.id === id) {
         todo.inputText = editTodoText;
+        todo.edit = false;
       }
       return todo;
     });
     setTodos(newTodos);
-    setEditTodoId("");
     setEditTodoText("");
   };
+
+  const handleEditTodo = (id: string) => {
+    setTodos((prevState) =>
+      prevState.map((prevTodo) =>
+        prevTodo.id === id
+          ? {
+              id: prevTodo.id,
+              inputText: prevTodo.inputText,
+              edit: true,
+              checked: prevTodo.checked,
+            }
+          : prevTodo
+      )
+    );
+  };
+
+  const handleUpdateBtnDisabled = (todoArray: Todo[]) => {
+   return editTodoText === "";
+  };
+
+  const handleEditBtnDisabled = (todoArray: Todo[]) => {
+   return todoArray.some((todo) => todo.edit);
+  };
+
 
   return (
     <div className={styles.container}>
@@ -80,24 +103,27 @@ export default function Home() {
         <h1>TODOリスト</h1>
         <TodoForm
           todo={todo}
+          todoArray={todos}
           handleFormSubmit={handleFormSubmit}
           handleInputTodo={handleInputTodo}
+          handleDisabled={handleEditBtnDisabled}
         />
         <ul style={{ listStyle: "none" }}>
           <ShowTodoList
             todoArray={todos}
             handleDeleteTodo={handleDeleteTodo}
             handleCheckTodo={handleCheckTodo}
+            handleUpdateTodo={handleUpdateTodo}
             handleEditTodo={handleEditTodo}
-            editTodoId={editTodoId}
+            handleUpdateBtnDisabled={handleUpdateBtnDisabled}
+            handleEditBtnDisabled={handleEditBtnDisabled}
             editTodoText={editTodoText}
-            setEditTodoId={setEditTodoId}
             setEditTodoText={setEditTodoText}
           />
         </ul>
         <div>
-          <LinkButton url="/completeTodo" text="完了タスク一覧" />
-          <LinkButton url="/notCompleteTodo" text="未完了タスク一覧" />
+          <LinkButton url="/completeTodo" text="完了タスク一覧" handleDisabled={handleEditBtnDisabled} todoArray={todos}/>
+          <LinkButton url="/notCompleteTodo" text="未完了タスク一覧" handleDisabled={handleEditBtnDisabled} todoArray={todos}/>
         </div>
       </main>
     </div>
