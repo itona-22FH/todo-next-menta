@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
-import { todoListState } from "./store/Auth/auth";
+import { todoEditState, todoListState } from "./store/Auth/auth";
 import { TodoActionButton } from "./TodoActionButton";
 
 export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
   const [todos, setTodos] = useRecoilState(todoListState);
-  const [editTodoText, setEditTodoText] = useState("");
+  const [editTodoText, setEditTodoText] = useRecoilState(todoEditState);
 
   const handleDeleteTodo = (id: string) => {
     const newTodos = todos.filter((todo) => {
