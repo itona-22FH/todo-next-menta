@@ -13,13 +13,6 @@ export default function Home() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [editTodoText, setEditTodoText] = useState("");
 
-  type Todo = {
-    inputText: string;
-    id: string;
-    checked: boolean;
-    edit: boolean;
-  };
-
   const handleInputTodo = (e: {
     target: { value: SetStateAction<string> };
   }) => {
@@ -83,13 +76,12 @@ export default function Home() {
   };
 
   const handleUpdateBtnDisabled = (todoArray: Todo[]) => {
-   return editTodoText === "";
+    return editTodoText === "";
   };
 
   const handleEditBtnDisabled = (todoArray: Todo[]) => {
-   return todoArray.some((todo) => todo.edit);
+    return todoArray.some((todo) => todo.edit);
   };
-
 
   return (
     <div className={styles.container}>
@@ -122,8 +114,18 @@ export default function Home() {
           />
         </ul>
         <div>
-          <LinkButton url="/completeTodo" text="完了タスク一覧" handleDisabled={handleEditBtnDisabled} todoArray={todos}/>
-          <LinkButton url="/notCompleteTodo" text="未完了タスク一覧" handleDisabled={handleEditBtnDisabled} todoArray={todos}/>
+          <LinkButton
+            url="/completeTodo"
+            text="完了タスク一覧"
+            handleDisabled={handleEditBtnDisabled}
+            todoArray={todos}
+          />
+          <LinkButton
+            url="/notCompleteTodo"
+            text="未完了タスク一覧"
+            handleDisabled={handleEditBtnDisabled}
+            todoArray={todos}
+          />
         </div>
       </main>
     </div>

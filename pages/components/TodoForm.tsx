@@ -1,23 +1,6 @@
 import React, { SetStateAction } from "react";
 
-type Todo = {
-  inputText: string;
-  id: string;
-  checked: boolean;
-  edit: boolean;
-};
 
-type Props = {
-  todo: string;
-  todoArray: Todo[];
-  handleFormSubmit: (e: { preventDefault: () => void }) => void;
-  handleInputTodo: (e: {
-    target: {
-      value: SetStateAction<string>;
-    };
-  }) => void;
-  handleDisabled: (todoArray: Todo[]) => boolean;
-};
 
 export const TodoForm = ({
 todo,
@@ -25,7 +8,7 @@ todo,
   handleFormSubmit,
   handleInputTodo,
   handleDisabled,
-}: Props) => {
+}: FormProps) => {
   return (
     <form onSubmit={handleFormSubmit}>
       <input

@@ -1,25 +1,6 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { TodoActionButton } from "./TodoActionButton";
 
-type Todo = {
-  inputText: string;
-  id: string;
-  checked: boolean;
-  edit: boolean;
-};
-
-type Props = {
-  todoArray: Todo[];
-  handleDeleteTodo: (id: string) => void;
-  handleCheckTodo: (id: string, checked: boolean) => void;
-  handleUpdateTodo: (id: string) => void;
-  handleEditTodo: (id: string) => void;
-  handleUpdateBtnDisabled: (todoArray: Todo[]) => boolean;
-  handleEditBtnDisabled: (todoArray: Todo[]) => boolean;
-  editTodoText: string;
-  setEditTodoText: Dispatch<SetStateAction<string>>;
-};
-
 export const ShowTodoList = ({
   todoArray,
   handleDeleteTodo,
@@ -30,7 +11,7 @@ export const ShowTodoList = ({
   handleEditBtnDisabled,
   editTodoText,
   setEditTodoText,
-}: Props) => {
+}: ShowTodoListProps) => {
   return (
     <>
       {todoArray.map((todo) => (
