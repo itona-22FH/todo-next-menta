@@ -1,25 +1,76 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { useState } from "react";
+import { useRecoilState } from "recoil";
+import { todoListState } from "./store/Auth/auth";
 import { TodoActionButton } from "./TodoActionButton";
 
-export const ShowTodoList = ({
-  todoArray,
-  handleDeleteTodo,
-  handleCheckTodo,
-  handleUpdateTodo,
-  handleEditTodo,
-  handleUpdateBtnDisabled,
-  handleEditBtnDisabled,
-  editTodoText,
-  setEditTodoText,
-}: ShowTodoListProps) => {
+export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
+  const [todos, setTodos] = useRecoilState(todoListState);
+  const [editTodoText, setEditTodoText] = useState("");
+
+  const handleDeleteTodo = (id: string) => {
+    const newTodos = todos.filter((todo) => {
+      if (todo.id !== id) {
+        return todo;
+      }
+    });
+    setTodos(newTodos);
+  };
+
+  const handleCheckTodo = (id: string, checked: boolean) => {
+    const newTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        todo.checked = !checked;
+      }
+      return todo;
+    });
+
+    setTodos(newTodos);
+  };
+
+  const handleUpdateTodo = (id: string) => {
+    const newTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        return {
+          id: todo.id,
+          inputText: editTodoText,
+          edit: false,
+          checked: todo.checked,
+        };
+      }
+      return todo;
+    });
+    setTodos(newTodos);
+    setEditTodoText("");
+    console.log(todos);
+  };
+
+  const handleEditTodo = (id: string) => {
+    setTodos((prevState) =>
+      prevState.map((prevTodo) =>
+        prevTodo.id === id
+          ? {
+              id: prevTodo.id,
+              inputText: prevTodo.inputText,
+              edit: true,
+              checked: prevTodo.checked,
+            }
+          : prevTodo
+      )
+    );
+  };
+
+  const handleUpdateBtnDisabled = () => {
+    return editTodoText === "";
+  };
+
   return (
     <>
-      {todoArray.map((todo) => (
+      {todos.map((todo: Todo) => (
         <li key={todo.id}>
           <input
             type="checkbox"
             checked={todo.checked}
-            disabled={handleEditBtnDisabled(todoArray)}
+            disabled={handleButtonDisabled(todos)}
             onChange={() => {
               handleCheckTodo(todo.id, todo.checked);
             }}
@@ -37,7 +88,7 @@ export const ShowTodoList = ({
                 id={todo.id}
                 handleOnClick={handleUpdateTodo}
                 text="再投稿"
-                todoArray={todoArray}
+                todoArray={todos}
                 handleDisabled={handleUpdateBtnDisabled}
               />
             </>
@@ -47,15 +98,15 @@ export const ShowTodoList = ({
                 id={todo.id}
                 text="削除"
                 handleOnClick={handleDeleteTodo}
-                todoArray={todoArray}
-                handleDisabled={handleEditBtnDisabled}
+                todoArray={todos}
+                handleDisabled={handleButtonDisabled}
               />
               <TodoActionButton
                 id={todo.id}
                 text="編集"
                 handleOnClick={handleEditTodo}
-                todoArray={todoArray}
-                handleDisabled={handleEditBtnDisabled}
+                todoArray={todos}
+                handleDisabled={handleButtonDisabled}
               />
             </>
           )}
