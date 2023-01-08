@@ -1,84 +1,10 @@
 import Head from "next/head";
-import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import { v4 as uuidv4 } from "uuid";
-import Link from "next/link";
-import { SetStateAction, useEffect, useState } from "react";
 import { LinkButton } from "./components/LinkButton";
 import { ShowTodoList } from "./components/ShowTodoList";
 import { TodoForm } from "./components/TodoForm";
 
 export default function Home() {
-  const [todo, setTodo] = useState("");
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [editTodoText, setEditTodoText] = useState("");
-
-  const handleInputTodo = (e: {
-    target: { value: SetStateAction<string> };
-  }) => {
-    setTodo(e.target.value);
-  };
-
-  const handleFormSubmit = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    setTodos([
-      { id: uuidv4(), inputText: todo.trim(), edit: false, checked: false },
-      ...todos,
-    ]);
-    setTodo("");
-  };
-
-  const handleDeleteTodo = (id: string) => {
-    const newTodos = todos.filter((todo) => {
-      if (todo.id !== id) {
-        return todo;
-      }
-    });
-    setTodos(newTodos);
-  };
-
-  const handleCheckTodo = (id: string, checked: boolean) => {
-    const newTodos = todos.map((todo) => {
-      if (todo.id === id) {
-        todo.checked = !checked;
-      }
-      return todo;
-    });
-
-    setTodos(newTodos);
-  };
-
-  const handleUpdateTodo = (id: string) => {
-    const newTodos = todos.map((todo) => {
-      if (todo.id === id) {
-        todo.inputText = editTodoText;
-        todo.edit = false;
-      }
-      return todo;
-    });
-    setTodos(newTodos);
-    setEditTodoText("");
-  };
-
-  const handleEditTodo = (id: string) => {
-    setTodos((prevState) =>
-      prevState.map((prevTodo) =>
-        prevTodo.id === id
-          ? {
-              id: prevTodo.id,
-              inputText: prevTodo.inputText,
-              edit: true,
-              checked: prevTodo.checked,
-            }
-          : prevTodo
-      )
-    );
-  };
-
-  const handleUpdateBtnDisabled = (todoArray: Todo[]) => {
-    return editTodoText === "";
-  };
-
   const handleButtonDisabled = (todoArray: Todo[]) => {
     return todoArray.some((todo) => todo.edit);
   };
@@ -93,38 +19,20 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1>TODOリスト</h1>
-        <TodoForm
-          todo={todo}
-          todoArray={todos}
-          handleFormSubmit={handleFormSubmit}
-          handleInputTodo={handleInputTodo}
-          handleDisabled={handleButtonDisabled}
-        />
+        <TodoForm handleButtonDisabled={handleButtonDisabled} />
         <ul style={{ listStyle: "none" }}>
-          <ShowTodoList
-            todoArray={todos}
-            handleDeleteTodo={handleDeleteTodo}
-            handleCheckTodo={handleCheckTodo}
-            handleUpdateTodo={handleUpdateTodo}
-            handleEditTodo={handleEditTodo}
-            handleUpdateBtnDisabled={handleUpdateBtnDisabled}
-            handleEditBtnDisabled={handleButtonDisabled}
-            editTodoText={editTodoText}
-            setEditTodoText={setEditTodoText}
-          />
+          <ShowTodoList handleButtonDisabled={handleButtonDisabled} />
         </ul>
         <div>
           <LinkButton
             url="/completeTodo"
             text="完了タスク一覧"
             handleDisabled={handleButtonDisabled}
-            todoArray={todos}
           />
           <LinkButton
             url="/notCompleteTodo"
             text="未完了タスク一覧"
             handleDisabled={handleButtonDisabled}
-            todoArray={todos}
           />
         </div>
       </main>
