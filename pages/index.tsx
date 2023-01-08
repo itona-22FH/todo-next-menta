@@ -1,8 +1,8 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { LinkButton } from "./components/LinkButton";
-import { ShowTodoList } from "./components/ShowTodoList";
-import { TodoForm } from "./components/TodoForm";
+import { LinkButton } from "../components/LinkButton";
+import { ShowTodoList } from "../components/ShowTodoList";
+import { TodoForm } from "../components/TodoForm";
 
 export default function Home() {
   const handleButtonDisabled = (todoArray: Todo[]) => {

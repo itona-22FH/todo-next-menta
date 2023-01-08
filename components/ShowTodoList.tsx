@@ -74,7 +74,7 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
             onChange={() => {
               handleCheckTodo(todo.id, todo.checked);
             }}
-          ></input>
+          />
           {todo.inputText}
           {todo.edit ? (
             <>
