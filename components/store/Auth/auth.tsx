@@ -9,3 +9,7 @@ export const todoState = atom<string>({
   key: "todoState",
   default: "",
 });
+export const todoEditState = atom<string>({
+  key: "todoEditState",
+  default: "",
+});
