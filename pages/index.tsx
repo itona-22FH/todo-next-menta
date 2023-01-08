@@ -79,7 +79,7 @@ export default function Home() {
     return editTodoText === "";
   };
 
-  const handleEditBtnDisabled = (todoArray: Todo[]) => {
+  const handleButtonDisabled = (todoArray: Todo[]) => {
     return todoArray.some((todo) => todo.edit);
   };
 
@@ -98,7 +98,7 @@ export default function Home() {
           todoArray={todos}
           handleFormSubmit={handleFormSubmit}
           handleInputTodo={handleInputTodo}
-          handleDisabled={handleEditBtnDisabled}
+          handleDisabled={handleButtonDisabled}
         />
         <ul style={{ listStyle: "none" }}>
           <ShowTodoList
@@ -108,7 +108,7 @@ export default function Home() {
             handleUpdateTodo={handleUpdateTodo}
             handleEditTodo={handleEditTodo}
             handleUpdateBtnDisabled={handleUpdateBtnDisabled}
-            handleEditBtnDisabled={handleEditBtnDisabled}
+            handleEditBtnDisabled={handleButtonDisabled}
             editTodoText={editTodoText}
             setEditTodoText={setEditTodoText}
           />
@@ -117,13 +117,13 @@ export default function Home() {
           <LinkButton
             url="/completeTodo"
             text="完了タスク一覧"
-            handleDisabled={handleEditBtnDisabled}
+            handleDisabled={handleButtonDisabled}
             todoArray={todos}
           />
           <LinkButton
             url="/notCompleteTodo"
             text="未完了タスク一覧"
-            handleDisabled={handleEditBtnDisabled}
+            handleDisabled={handleButtonDisabled}
             todoArray={todos}
           />
         </div>
