@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { todoListState, todoState } from "./store/Auth/auth";
+import { useRecoilValue } from "recoil";
+import { todoListState } from "./store/Auth/auth";
 
 export const TodoActionButton = ({
   id,
