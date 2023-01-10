@@ -13,8 +13,8 @@ type ShowTodoListProps = {
   handleButtonDisabled: (todoArray: Todo[]) => boolean;
 };
 
-type LinkButtonProps = {
-  url: string;
+type SortButtonProps = {
+  sortKey: string;
   text: string;
   handleDisabled: (todoArray: Todo[]) => boolean;
 };
@@ -26,3 +26,4 @@ type TodoActionProps = {
   text: string;
   todoArray: Todo[];
 };
+
