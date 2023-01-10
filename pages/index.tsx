@@ -1,6 +1,6 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { LinkButton } from "../components/LinkButton";
+import { SortButton } from "../components/SortButton";
 import { ShowTodoList } from "../components/ShowTodoList";
 import { TodoForm } from "../components/TodoForm";
 
@@ -24,14 +24,19 @@ export default function Home() {
           <ShowTodoList handleButtonDisabled={handleButtonDisabled} />
         </ul>
         <div>
-          <LinkButton
-            url="/completeTodo"
+          <SortButton
+            sortKey="fix"
             text="完了タスク一覧"
             handleDisabled={handleButtonDisabled}
           />
-          <LinkButton
-            url="/notCompleteTodo"
+          <SortButton
+            sortKey="notFix"
             text="未完了タスク一覧"
+            handleDisabled={handleButtonDisabled}
+          />
+          <SortButton
+            sortKey="all"
+            text="すべてのタスク一覧"
             handleDisabled={handleButtonDisabled}
           />
         </div>
