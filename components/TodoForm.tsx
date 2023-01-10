@@ -20,8 +20,8 @@ export const TodoForm = ({ handleButtonDisabled }: FormProps) => {
       ...todos,
     ]);
     setTodo("");
-    console.log(todos);
   };
+
   return (
     <form onSubmit={handleFormSubmit}>
       <input
