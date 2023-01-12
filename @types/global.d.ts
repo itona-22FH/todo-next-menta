@@ -26,4 +26,3 @@ type TodoActionProps = {
   text: string;
   todoArray: Todo[];
 };
-
