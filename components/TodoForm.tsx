@@ -3,6 +3,8 @@ import { useRecoilState } from "recoil";
 import { todoListState } from "./store/atoms/todoListState";
 import { todoState } from "./store/atoms/todoState";
 import { v4 as uuidv4 } from "uuid";
+import { Box, Input } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
 
 export const TodoForm = ({ handleButtonDisabled }: FormProps) => {
   const [todos, setTodos] = useRecoilState(todoListState);
@@ -24,17 +26,33 @@ export const TodoForm = ({ handleButtonDisabled }: FormProps) => {
   };
 
   return (
-    <form onSubmit={handleFormSubmit}>
-      <input
-        type="text"
-        value={todo}
-        name="todo"
-        onChange={handleInputTodo}
-        disabled={handleButtonDisabled(todos)}
-      ></input>
-      <button type="submit" disabled={handleButtonDisabled(todos)}>
-        タスク追加
-      </button>
-    </form>
+    <div>
+      <form onSubmit={handleFormSubmit} style={{ display: "inline-flex", marginBottom: 20 }}
+      >
+        <Input
+          type="text"
+          value={todo}
+          name="todo"
+          onChange={handleInputTodo}
+          disabled={handleButtonDisabled(todos)}
+          size="ms"
+          focusBorderColor="Blue"
+          mr={2}
+        ></Input>
+        <Box
+          as="button"
+          type="submit"
+          disabled={handleButtonDisabled(todos)}
+          borderRadius="md"
+          bg="Blue"
+          color="White"
+          fontSize={10}
+          px={4}
+          h={8}
+        >
+          <AddIcon />
+        </Box>
+      </form>
+    </div>
   );
 };

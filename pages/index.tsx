@@ -3,6 +3,7 @@ import styles from "../styles/Home.module.css";
 import { SortButton } from "../components/SortButton";
 import { ShowTodoList } from "../components/ShowTodoList";
 import { TodoForm } from "../components/TodoForm";
+import { Box, UnorderedList } from "@chakra-ui/react";
 
 export default function Home() {
   const handleButtonDisabled = (todoArray: Todo[]) => {
@@ -18,12 +19,36 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1>TODOリスト</h1>
+        <Box
+          bg="black"
+          color="white"
+          marginBottom={50}
+          w={500}
+          h={"3em"}
+          borderRadius="md"
+        >
+          <h1
+            style={{
+              textAlign: "center",
+              width: "100%",
+              height: "100%",
+              fontSize: "2em",
+            }}
+          >
+            TODOリスト
+          </h1>
+        </Box>
         <TodoForm handleButtonDisabled={handleButtonDisabled} />
-        <ul style={{ listStyle: "none" }}>
+        <UnorderedList style={{ listStyle: "none" }}>
           <ShowTodoList handleButtonDisabled={handleButtonDisabled} />
-        </ul>
-        <div>
+        </UnorderedList>
+        <div
+          style={{
+            display: "flex",
+            width: 500,
+            justifyContent: "space-around",
+          }}
+        >
           <SortButton
             sortKey="fix"
             text="完了タスク一覧"

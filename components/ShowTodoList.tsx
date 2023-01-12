@@ -1,10 +1,13 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { todoEditState } from "./store/atoms/todoEditState";
 import { todoListState } from "./store/atoms/todoListState";
 import { sortTodoState } from "./store/selectors/sortTodoState";
 import { TodoActionButton } from "./TodoActionButton";
+import { CheckIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { Checkbox } from "@chakra-ui/react";
+import { ListItem } from "@chakra-ui/react";
+import { Input } from "@chakra-ui/react";
 
 export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
   const [todos, setTodos] = useRecoilState(todoListState);
@@ -73,11 +76,13 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
   return (
     <>
       {todoList?.map((todo: Todo) => (
-        <li key={todo.id}>
-          <input
-            type="checkbox"
-            checked={todo.checked}
-            disabled={handleButtonDisabled(todos)}
+        <ListItem key={todo.id} mb={1}>
+          <Checkbox
+            colorScheme="cyan"
+            mt={2}
+            mr={2}
+            isChecked={todo.checked}
+            isDisabled={handleButtonDisabled(todos)}
             onChange={() => {
               handleCheckTodo(todo.id, todo.checked);
             }}
@@ -85,39 +90,47 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
           {todo.inputText}
           {todo.edit ? (
             <>
-              <input
-                type="text"
-                placeholder="編集内容を入力"
-                value={editTodoText}
-                onChange={(e) => setEditTodoText(e.target.value)}
-              />
-              <TodoActionButton
-                id={todo.id}
-                handleOnClick={handleUpdateTodo}
-                text="再投稿"
-                todoArray={todos}
-                handleDisabled={handleUpdateBtnDisabled}
-              />
+              <form style={{ display: "inline-flex"}}>
+                <Input
+                  type="text"
+                  placeholder="編集内容を入力"
+                  value={editTodoText}
+                  onChange={(e) => setEditTodoText(e.target.value)}
+                  size="cs"
+                  focusBorderColor="Green"
+                  ml={2}
+                />
+                <TodoActionButton
+                  id={todo.id}
+                  handleOnClick={handleUpdateTodo}
+                  text={<CheckIcon/>}
+                  todoArray={todos}
+                  handleDisabled={handleUpdateBtnDisabled}
+                  btnBgColor={"Green"}
+                />
+              </form>
             </>
           ) : (
             <>
               <TodoActionButton
                 id={todo.id}
-                text="削除"
+                text={<DeleteIcon />}
+                btnBgColor={"red"}
                 handleOnClick={handleDeleteTodo}
                 todoArray={todos}
                 handleDisabled={handleButtonDisabled}
               />
               <TodoActionButton
                 id={todo.id}
-                text="編集"
+                text={<EditIcon />}
+                btnBgColor={"Green"}
                 handleOnClick={handleEditTodo}
                 todoArray={todos}
                 handleDisabled={handleButtonDisabled}
               />
             </>
           )}
-        </li>
+        </ListItem>
       ))}
     </>
   );

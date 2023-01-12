@@ -3,6 +3,7 @@ import React from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { todoListState } from "./store/atoms/todoListState";
 import { sortKeyState } from "./store/atoms/sortKeyState";
+import { Box } from "@chakra-ui/react";
 
 export const SortButton = ({
   sortKey,
@@ -13,7 +14,11 @@ export const SortButton = ({
   const setSortKey = useSetRecoilState(sortKeyState);
 
   return (
-    <button
+    <Box
+      as="button"
+      bg="orange"
+      mt={10}
+      borderRadius="md"
       disabled={handleDisabled(todos)}
       onClick={() => {
         if (sortKey === "fix") {
@@ -26,6 +31,6 @@ export const SortButton = ({
       }}
     >
       {text}
-    </button>
+    </Box>
   );
 };
