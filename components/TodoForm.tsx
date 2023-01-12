@@ -1,6 +1,7 @@
 import React, { SetStateAction } from "react";
 import { useRecoilState } from "recoil";
-import { todoListState, todoState } from "./store/Auth/auth";
+import { todoListState } from "./store/atoms/todoListState";
+import { todoState } from "./store/atoms/todoState";
 import { v4 as uuidv4 } from "uuid";
 
 export const TodoForm = ({ handleButtonDisabled }: FormProps) => {

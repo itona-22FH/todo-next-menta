@@ -1,11 +1,8 @@
 import Link from "next/link";
 import React from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import {
-  sortedTodoState,
-  sortKeyState,
-  todoListState,
-} from "./store/Auth/auth";
+import { todoListState } from "./store/atoms/todoListState";
+import { sortKeyState } from "./store/atoms/sortKeyState";
 
 export const SortButton = ({
   sortKey,
