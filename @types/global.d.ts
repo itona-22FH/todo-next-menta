@@ -23,6 +23,7 @@ type TodoActionProps = {
   id: string;
   handleOnClick: (id: string) => void;
   handleDisabled: (todoArray: Todo[]) => boolean;
-  text: string;
+  text: element;
   todoArray: Todo[];
+  btnBgColor: string;
 };
