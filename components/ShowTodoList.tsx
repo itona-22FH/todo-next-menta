@@ -1,32 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  sortedTodoState,
-  todoEditState,
-  todoListState,
-  sortKeyState,
-} from "./store/Auth/auth";
+import { todoEditState } from "./store/atoms/todoEditState";
+import { todoListState } from "./store/atoms/todoListState";
+import { sortTodoState } from "./store/selectors/sortTodoState";
 import { TodoActionButton } from "./TodoActionButton";
 
 export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
   const [todos, setTodos] = useRecoilState(todoListState);
-  const [sortedTodos, setSortedTodos] = useRecoilState(sortedTodoState);
   const [editTodoText, setEditTodoText] = useRecoilState(todoEditState);
-  const sortKey = useRecoilValue(sortKeyState);
-
-  useEffect(() => {
-    setSortedTodos(
-      todos.filter((todo) => {
-        if (sortKey === "all") return todo;
-        else if (sortKey === "fix") {
-          if (todo.checked) return todo;
-        } else if (sortKey === "notFix") {
-          if (!todo.checked) return todo;
-        }
-      })
-    );
-  }, [todos, sortKey]);
+  const todoList = useRecoilValue(sortTodoState);
 
   const handleDeleteTodo = (id: string) => {
     const newTodos = todos.filter((todo) => {
@@ -89,12 +72,12 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
 
   return (
     <>
-      {sortedTodos.map((todo: Todo) => (
+      {todoList?.map((todo: Todo) => (
         <li key={todo.id}>
           <input
             type="checkbox"
             checked={todo.checked}
-            disabled={handleButtonDisabled(sortedTodos)}
+            disabled={handleButtonDisabled(todos)}
             onChange={() => {
               handleCheckTodo(todo.id, todo.checked);
             }}
@@ -112,7 +95,7 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
                 id={todo.id}
                 handleOnClick={handleUpdateTodo}
                 text="再投稿"
-                todoArray={sortedTodos}
+                todoArray={todos}
                 handleDisabled={handleUpdateBtnDisabled}
               />
             </>
@@ -122,14 +105,14 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
                 id={todo.id}
                 text="削除"
                 handleOnClick={handleDeleteTodo}
-                todoArray={sortedTodos}
+                todoArray={todos}
                 handleDisabled={handleButtonDisabled}
               />
               <TodoActionButton
                 id={todo.id}
                 text="編集"
                 handleOnClick={handleEditTodo}
-                todoArray={sortedTodos}
+                todoArray={todos}
                 handleDisabled={handleButtonDisabled}
               />
             </>
