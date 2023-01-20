@@ -41,7 +41,9 @@ export const TodoForm = ({ handleButtonDisabled }: FormProps) => {
 
   return (
     <div>
-      <form onSubmit={handleFormSubmit} style={{ display: "inline-flex", marginBottom: 20 }}
+      <form
+        onSubmit={handleFormSubmit}
+        style={{ display: "inline-flex", marginBottom: 20 }}
       >
         <Input
           type="text"
