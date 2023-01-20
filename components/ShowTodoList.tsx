@@ -11,22 +11,22 @@ import { Input } from "@chakra-ui/react";
 import { collection, getDocs } from "firebase/firestore";
 import db from "../firebase/firebaseConfig";
 
+(async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, "next-todo-menta"));
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+    });
+  } catch (e) {
+    console.error(e);
+  }
+})();
+
 export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
   const [todos, setTodos] = useRecoilState(todoListState);
   const [editTodoText, setEditTodoText] = useRecoilState(todoEditState);
   const todoList = useRecoilValue(sortTodoState);
-
-  (async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, "next-todo-menta"));
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data())
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  })();
 
   const handleDeleteTodo = (id: string) => {
     const newTodos = todos.filter((todo) => {
