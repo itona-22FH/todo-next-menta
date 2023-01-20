@@ -8,7 +8,7 @@ import { CheckIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { Checkbox } from "@chakra-ui/react";
 import { ListItem } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
-import { collection, DocumentData, getDocs, QueryDocumentSnapshot } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import db from "../firebase/firebaseConfig";
 
 export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
