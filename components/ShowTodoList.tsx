@@ -8,11 +8,25 @@ import { CheckIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { Checkbox } from "@chakra-ui/react";
 import { ListItem } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
+import { collection, DocumentData, getDocs, QueryDocumentSnapshot } from "firebase/firestore";
+import db from "../firebase/firebaseConfig";
 
 export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
   const [todos, setTodos] = useRecoilState(todoListState);
   const [editTodoText, setEditTodoText] = useRecoilState(todoEditState);
   const todoList = useRecoilValue(sortTodoState);
+
+  (async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "next-todo-menta"));
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data())
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  })();
 
   const handleDeleteTodo = (id: string) => {
     const newTodos = todos.filter((todo) => {
@@ -90,7 +104,7 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
           {todo.inputText}
           {todo.edit ? (
             <>
-              <form style={{ display: "inline-flex"}}>
+              <form style={{ display: "inline-flex" }}>
                 <Input
                   type="text"
                   placeholder="編集内容を入力"
@@ -103,7 +117,7 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
                 <TodoActionButton
                   id={todo.id}
                   handleOnClick={handleUpdateTodo}
-                  text={<CheckIcon/>}
+                  text={<CheckIcon />}
                   todoArray={todos}
                   handleDisabled={handleUpdateBtnDisabled}
                   btnBgColor={"Green"}
