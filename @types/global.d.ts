@@ -1,5 +1,5 @@
 type Todo = {
-  inputText: string;
+  text: string;
   id: string;
   checked: boolean;
   edit: boolean;
@@ -21,7 +21,8 @@ type SortButtonProps = {
 
 type TodoActionProps = {
   id: string;
-  handleOnClick: (id: string) => void;
+  edit: boolean;
+  handleOnClick: (id: string, edit: boolean) => void;
   handleDisabled: (todoArray: Todo[]) => boolean;
   text: element;
   todoArray: Todo[];

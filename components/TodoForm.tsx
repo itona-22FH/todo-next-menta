@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Box, Input } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import db from "../firebase/firebaseConfig";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 
 export const TodoForm = ({ handleButtonDisabled }: FormProps) => {
   const [todos, setTodos] = useRecoilState(todoListState);
@@ -26,18 +26,17 @@ export const TodoForm = ({ handleButtonDisabled }: FormProps) => {
           text: todo,
           checked: false,
           edit: false,
+          createData: Timestamp.fromDate(new Date()),
         });
         console.log("Document written with ID: ", docRef.id);
       } catch (e) {
         console.error("Error adding document: ", e);
       }
     })();
-    setTodos([
-      { id: uuidv4(), inputText: todo.trim(), edit: false, checked: false },
-      ...todos,
-    ]);
     setTodo("");
   };
+
+  
 
   return (
     <div>

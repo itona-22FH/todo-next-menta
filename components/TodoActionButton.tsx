@@ -10,6 +10,7 @@ export const TodoActionButton = ({
   handleDisabled,
   text,
   btnBgColor,
+  edit,
 }: TodoActionProps) => {
   const todos = useRecoilValue(todoListState);
   return (
@@ -22,7 +23,7 @@ export const TodoActionButton = ({
       h={8}
       ml={3}
       onClick={() => {
-        handleOnClick(id);
+        handleOnClick(id, edit);
       }}
       disabled={handleDisabled(todos)}
     >
