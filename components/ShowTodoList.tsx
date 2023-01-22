@@ -44,7 +44,8 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
         console.error(e);
       }
     })();
-  });
+  }, []);
+
 
   const handleDeleteTodo = async (id: string) => {
     await deleteDoc(doc(db, "next-todo-menta", id));
