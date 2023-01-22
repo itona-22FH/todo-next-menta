@@ -47,14 +47,19 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
     })();
   }, []);
 
-  const q = query(collection(db, "next-todo-menta"));
-  onSnapshot(q, (querySnapshot) => {
-    const docTodos: Todo[] = [];
-    querySnapshot.forEach((doc) => {
-      docTodos.push({ ...(doc.data() as Todo), id: doc.id });
+  try {
+    const q = query(collection(db, "next-todo-menta"));
+    onSnapshot(q, (querySnapshot) => {
+      const docTodos: Todo[] = [];
+      querySnapshot.forEach((doc) => {
+        docTodos.push({ ...(doc.data() as Todo), id: doc.id });
+      });
+      console.log(docTodos);
+      // setTodos(docTodos);
     });
-    console.log(docTodos);
-  });
+  }catch(e) {
+    console.error(e)
+  }
 
   const handleDeleteTodo = async (id: string) => {
     await deleteDoc(doc(db, "next-todo-menta", id));
