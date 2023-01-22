@@ -17,6 +17,7 @@ import {
   QuerySnapshot,
   deleteDoc,
   Unsubscribe,
+  query,
 } from "firebase/firestore";
 import db from "../firebase/firebaseConfig";
 import { CollectionReference } from "firebase/firestore";
@@ -29,7 +30,7 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
 
   useEffect(() => {
     (async () => {
-      const docTodos: Todo[] | ((currVal: Todo[]) => Todo[]) = [];
+      const docTodos: Todo[] = [];
       try {
         const querySnapshot = await getDocs(
           collection(db, "next-todo-menta") as CollectionReference<Todo>
@@ -46,6 +47,14 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
     })();
   }, []);
 
+  const q = query(collection(db, "next-todo-menta"));
+  onSnapshot(q, (querySnapshot) => {
+    const docTodos: Todo[] = [];
+    querySnapshot.forEach((doc) => {
+      docTodos.push({ ...(doc.data() as Todo), id: doc.id });
+    });
+    console.log(docTodos);
+  });
 
   const handleDeleteTodo = async (id: string) => {
     await deleteDoc(doc(db, "next-todo-menta", id));
