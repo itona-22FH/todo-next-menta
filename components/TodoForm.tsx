@@ -7,10 +7,13 @@ import { Box, Input } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import db from "../firebase/firebaseConfig";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { onSnapshotState } from "./store/atoms/onSnapshotTrigger";
 
 export const TodoForm = ({ handleButtonDisabled }: FormProps) => {
   const [todos, setTodos] = useRecoilState(todoListState);
   const [todo, setTodo] = useRecoilState(todoState);
+  const [onSnapshotTrigger, setOnSnapshotTrigger] =
+    useRecoilState(onSnapshotState);
 
   const handleInputTodo = (e: {
     target: { value: SetStateAction<string> };
@@ -28,6 +31,7 @@ export const TodoForm = ({ handleButtonDisabled }: FormProps) => {
           edit: false,
           createData: Timestamp.fromDate(new Date()),
         });
+        // setOnSnapshotTrigger(!onSnapshotTrigger);
         console.log("Document written with ID: ", docRef.id);
       } catch (e) {
         console.error("Error adding document: ", e);
@@ -35,8 +39,6 @@ export const TodoForm = ({ handleButtonDisabled }: FormProps) => {
     })();
     setTodo("");
   };
-
-  
 
   return (
     <div>

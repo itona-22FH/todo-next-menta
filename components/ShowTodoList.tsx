@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useEffect, useState } from "react";
 import { constSelector, useRecoilState, useRecoilValue } from "recoil";
 import { todoEditState } from "./store/atoms/todoEditState";
 import { todoListState } from "./store/atoms/todoListState";
@@ -14,55 +15,54 @@ import {
   getDocs,
   updateDoc,
   onSnapshot,
-  QuerySnapshot,
   deleteDoc,
-  Unsubscribe,
   query,
 } from "firebase/firestore";
 import db from "../firebase/firebaseConfig";
 import { CollectionReference } from "firebase/firestore";
 import { setHttpClientAndAgentOptions } from "next/dist/server/config";
+import { onSnapshotState } from "./store/atoms/onSnapshotTrigger";
 
 export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
+  const [onSnapshotTrigger, setOnSnapshotTrigger] =
+    useRecoilState(onSnapshotState);
   const [todos, setTodos] = useRecoilState(todoListState);
   const [editTodoText, setEditTodoText] = useRecoilState(todoEditState);
   const todoList = useRecoilValue(sortTodoState);
 
-  useEffect(() => {
-    (async () => {
-      const docTodos: Todo[] = [];
-      try {
-        const querySnapshot = await getDocs(
-          collection(db, "next-todo-menta") as CollectionReference<Todo>
-        );
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          const docTodo = { ...doc.data() as Todo, id: doc.id };
-          docTodos.push(docTodo);
-        });
-        setTodos(docTodos);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const docTodos: Todo[] = [];
+  //     try {
+  //       const querySnapshot = await getDocs(
+  //         collection(db, "next-todo-menta") as CollectionReference<Todo>
+  //       );
+  //       querySnapshot.forEach((doc) => {
+  //         // doc.data() is never undefined for query doc snapshots
+  //         const docTodo = { ...(doc.data() as Todo), id: doc.id };
+  //         docTodos.push(docTodo);
+  //       });
+  //       setTodos(docTodos);
+  //     } catch (e) {
+  //       console.error(e);
+  //     }
+  //   })();
+  // }, []);
 
-  try {
+  useEffect(() => {
     const q = query(collection(db, "next-todo-menta"));
     onSnapshot(q, (querySnapshot) => {
       const docTodos: Todo[] = [];
       querySnapshot.forEach((doc) => {
         docTodos.push({ ...(doc.data() as Todo), id: doc.id });
       });
-      console.log(docTodos);
-      // setTodos(docTodos);
+      setTodos(docTodos);
     });
-  }catch(e) {
-    console.error(e)
-  }
+  }, [onSnapshotTrigger]);
 
   const handleDeleteTodo = async (id: string) => {
     await deleteDoc(doc(db, "next-todo-menta", id));
+    setOnSnapshotTrigger(!onSnapshotTrigger);
   };
 
   const handleCheckTodo = async (id: string, checked: boolean) => {
@@ -70,6 +70,7 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
     await updateDoc(docTodo, {
       checked: !checked,
     });
+    setOnSnapshotTrigger(!onSnapshotTrigger);
   };
 
   const handleUpdateTodo = async (id: string, edit: boolean) => {
@@ -78,6 +79,7 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
       edit: !edit,
       text: editTodoText,
     });
+    setOnSnapshotTrigger(!onSnapshotTrigger);
   };
 
   const handleEditTodo = async (id: string, edit: boolean) => {
@@ -85,6 +87,7 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
     await updateDoc(docTodo, {
       edit: !edit,
     });
+    setOnSnapshotTrigger(!onSnapshotTrigger);
   };
 
   const handleUpdateBtnDisabled = () => {
