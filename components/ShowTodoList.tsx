@@ -114,7 +114,7 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
                   value={editTodoText}
                   onChange={(e) => setEditTodoText(e.target.value)}
                   size="cs"
-                  focusBorderColor="Green"
+                  focusBorderColor={!handleUpdateBtnDisabled()?"Green":"Red"}
                   ml={2}
                 />
                 <Box
