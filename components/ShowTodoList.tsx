@@ -78,13 +78,6 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
     return editTodoText === "";
   };
 
-  const handleCancelEdit = async (id: string, edit: boolean) => {
-    const docTodo = doc(db, "next-todo-menta", id);
-    await updateDoc(docTodo, {
-      edit: !edit,
-    });
-  };
-
   return (
     <>
       {todoList?.map((todo: Todo) => (
@@ -114,27 +107,24 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
                   value={editTodoText}
                   onChange={(e) => setEditTodoText(e.target.value)}
                   size="cs"
-                  focusBorderColor={!handleUpdateBtnDisabled()?"Green":"Red"}
+                  focusBorderColor={
+                    !handleUpdateBtnDisabled() ? "Green" : "Red"
+                  }
                   ml={2}
+                />
+                <TodoActionButton
+                  id={todo.id}
+                  edit={todo.edit}
+                  text={<CloseIcon />}
+                  btnBgColor={"red"}
+                  handleOnClick={handleEditTodo}
+                  todoArray={todos}
+                  handleDisabled={() => !handleUpdateBtnDisabled()}
                 />
                 <Box
                   as="button"
                   borderRadius="md"
-                  bg={!handleUpdateBtnDisabled()?"Gray":"Red"}
-                  color="white"
-                  px={2}
-                  h={8}
-                  ml={3}
-                  disabled={!handleUpdateBtnDisabled()}
-                  onClick={() => handleCancelEdit(todo.id, todo.edit)}
-                >
-                  {<CloseIcon />}
-                </Box>
-                <Box
-                  type="submit"
-                  as="button"
-                  borderRadius="md"
-                  bg={handleUpdateBtnDisabled()?"Gray":"Green"}
+                  bg={handleUpdateBtnDisabled() ? "Gray" : "Green"}
                   color="white"
                   px={2}
                   h={8}
