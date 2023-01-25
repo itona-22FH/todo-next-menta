@@ -56,7 +56,7 @@ export const TodoForm = ({ handleButtonDisabled }: FormProps) => {
           type="submit"
           disabled={handleButtonDisabled(todos)}
           borderRadius="md"
-          bg="Blue"
+          bg={handleButtonDisabled(todos) ? "Gray" : "Blue"}
           color="White"
           fontSize={10}
           px={4}

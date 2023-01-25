@@ -16,7 +16,7 @@ export const SortButton = ({
   return (
     <Box
       as="button"
-      bg="orange"
+      bg={handleDisabled(todos)?"Gray":"orange"}
       mt={10}
       borderRadius="md"
       disabled={handleDisabled(todos)}
