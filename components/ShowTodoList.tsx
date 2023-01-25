@@ -5,8 +5,8 @@ import { todoEditState } from "./store/atoms/todoEditState";
 import { todoListState } from "./store/atoms/todoListState";
 import { sortTodoState } from "./store/selectors/sortTodoState";
 import { TodoActionButton } from "./TodoActionButton";
-import { CheckIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { Checkbox } from "@chakra-ui/react";
+import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { Box, Checkbox } from "@chakra-ui/react";
 import { ListItem } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
 import {
@@ -51,12 +51,20 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
     });
   };
 
-  const handleUpdateTodo = async (id: string, edit: boolean) => {
+  const handleUpdateTodo = async (
+    id: string,
+    edit: boolean,
+    e: { preventDefault: () => void },
+    text: string
+  ) => {
+    e.preventDefault();
     const docTodo = doc(db, "next-todo-menta", id);
+    const updateText = editTodoText === "" ? text : editTodoText;
     await updateDoc(docTodo, {
       edit: !edit,
-      text: editTodoText,
+      text: updateText,
     });
+    setEditTodoText("");
   };
 
   const handleEditTodo = async (id: string, edit: boolean) => {
@@ -68,6 +76,13 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
 
   const handleUpdateBtnDisabled = () => {
     return editTodoText === "";
+  };
+
+  const handleCancelEdit = async (id: string, edit: boolean) => {
+    const docTodo = doc(db, "next-todo-menta", id);
+    await updateDoc(docTodo, {
+      edit: !edit,
+    });
   };
 
   return (
@@ -87,7 +102,12 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
           {todo.text}
           {todo.edit ? (
             <>
-              <form style={{ display: "inline-flex" }}>
+              <form
+                style={{ display: "inline-flex" }}
+                onSubmit={(e) =>
+                  handleUpdateTodo(todo.id, todo.edit, e, todo.text)
+                }
+              >
                 <Input
                   type="text"
                   placeholder="編集内容を入力"
@@ -97,15 +117,32 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
                   focusBorderColor="Green"
                   ml={2}
                 />
-                <TodoActionButton
-                  id={todo.id}
-                  edit={todo.edit}
-                  handleOnClick={handleUpdateTodo}
-                  text={<CheckIcon />}
-                  todoArray={todos}
-                  handleDisabled={handleUpdateBtnDisabled}
-                  btnBgColor={"Green"}
-                />
+                <Box
+                  as="button"
+                  borderRadius="md"
+                  bg={!handleUpdateBtnDisabled()?"Gray":"Red"}
+                  color="white"
+                  px={2}
+                  h={8}
+                  ml={3}
+                  disabled={!handleUpdateBtnDisabled()}
+                  onClick={() => handleCancelEdit(todo.id, todo.edit)}
+                >
+                  {<CloseIcon />}
+                </Box>
+                <Box
+                  type="submit"
+                  as="button"
+                  borderRadius="md"
+                  bg={handleUpdateBtnDisabled()?"Gray":"Green"}
+                  color="white"
+                  px={2}
+                  h={8}
+                  ml={3}
+                  disabled={handleUpdateBtnDisabled()}
+                >
+                  {<CheckIcon />}
+                </Box>
               </form>
             </>
           ) : (
@@ -114,7 +151,7 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
                 id={todo.id}
                 edit={todo.edit}
                 text={<DeleteIcon />}
-                btnBgColor={"red"}
+                btnBgColor={"Red"}
                 handleOnClick={handleDeleteTodo}
                 todoArray={todos}
                 handleDisabled={handleButtonDisabled}
