@@ -14,17 +14,11 @@ export const TodoActionButton = ({
 }: TodoActionProps) => {
   const todos = useRecoilValue(todoListState);
 
-  const changeColor = () => {
-    todos.some((todo) => {
-      todo.edit
-    });
-  };
-
   return (
     <Box
       as="button"
       borderRadius="md"
-      bg={handleDisabled(todos)?"Gray":btnBgColor}
+      bg={handleDisabled(todos) ? "Gray" : btnBgColor}
       color="white"
       px={2}
       h={8}
