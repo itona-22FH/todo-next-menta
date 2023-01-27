@@ -1,15 +1,14 @@
 import React, { SetStateAction } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { todoListState } from "./store/atoms/todoListState";
 import { todoState } from "./store/atoms/todoState";
-import { v4 as uuidv4 } from "uuid";
 import { Box, Input } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import db from "../firebase/firebaseConfig";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 
 export const TodoForm = ({ handleButtonDisabled }: FormProps) => {
-  const [todos, setTodos] = useRecoilState(todoListState);
+  const todos = useRecoilValue(todoListState);
   const [todo, setTodo] = useRecoilState(todoState);
 
   const handleInputTodo = (e: {
@@ -36,8 +35,6 @@ export const TodoForm = ({ handleButtonDisabled }: FormProps) => {
     setTodo("");
   };
 
-  
-
   return (
     <div>
       <form
@@ -59,7 +56,7 @@ export const TodoForm = ({ handleButtonDisabled }: FormProps) => {
           type="submit"
           disabled={handleButtonDisabled(todos)}
           borderRadius="md"
-          bg="Blue"
+          bg={handleButtonDisabled(todos) ? "Gray" : "Blue"}
           color="White"
           fontSize={10}
           px={4}

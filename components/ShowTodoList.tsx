@@ -1,26 +1,24 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect } from "react";
-import { constSelector, useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { todoEditState } from "./store/atoms/todoEditState";
 import { todoListState } from "./store/atoms/todoListState";
 import { sortTodoState } from "./store/selectors/sortTodoState";
 import { TodoActionButton } from "./TodoActionButton";
-import { CheckIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { Checkbox } from "@chakra-ui/react";
+import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { Box, Checkbox } from "@chakra-ui/react";
 import { ListItem } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
 import {
   collection,
   doc,
-  getDocs,
   updateDoc,
   onSnapshot,
-  QuerySnapshot,
   deleteDoc,
-  Unsubscribe,
+  query,
+  orderBy,
 } from "firebase/firestore";
 import db from "../firebase/firebaseConfig";
-import { CollectionReference } from "firebase/firestore";
-import { setHttpClientAndAgentOptions } from "next/dist/server/config";
 
 export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
   const [todos, setTodos] = useRecoilState(todoListState);
@@ -28,24 +26,19 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
   const todoList = useRecoilValue(sortTodoState);
 
   useEffect(() => {
-    (async () => {
-      const docTodos: Todo[] | ((currVal: Todo[]) => Todo[]) = [];
-      try {
-        const querySnapshot = await getDocs(
-          collection(db, "next-todo-menta") as CollectionReference<Todo>
-        );
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          const docTodo = { ...doc.data() as Todo, id: doc.id };
-          docTodos.push(docTodo);
-        });
-        setTodos(docTodos);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
+    const q = query(
+      collection(db, "next-todo-menta"),
+      orderBy("createData", "desc")
+    );
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const docTodos: Todo[] = [];
+      querySnapshot.forEach((doc) => {
+        docTodos.push({ ...(doc.data() as Todo), id: doc.id });
+      });
+      setTodos(docTodos);
+    });
+    return () => unsubscribe();
   }, []);
-
 
   const handleDeleteTodo = async (id: string) => {
     await deleteDoc(doc(db, "next-todo-menta", id));
@@ -58,12 +51,20 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
     });
   };
 
-  const handleUpdateTodo = async (id: string, edit: boolean) => {
+  const handleUpdateTodo = async (
+    id: string,
+    edit: boolean,
+    e: { preventDefault: () => void },
+    text: string
+  ) => {
+    e.preventDefault();
     const docTodo = doc(db, "next-todo-menta", id);
+    const updateText = editTodoText === "" ? text : editTodoText;
     await updateDoc(docTodo, {
       edit: !edit,
-      text: editTodoText,
+      text: updateText,
     });
+    setEditTodoText("");
   };
 
   const handleEditTodo = async (id: string, edit: boolean) => {
@@ -94,25 +95,44 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
           {todo.text}
           {todo.edit ? (
             <>
-              <form style={{ display: "inline-flex" }}>
+              <form
+                style={{ display: "inline-flex" }}
+                onSubmit={(e) =>
+                  handleUpdateTodo(todo.id, todo.edit, e, todo.text)
+                }
+              >
                 <Input
                   type="text"
                   placeholder="編集内容を入力"
                   value={editTodoText}
                   onChange={(e) => setEditTodoText(e.target.value)}
                   size="cs"
-                  focusBorderColor="Green"
+                  focusBorderColor={
+                    !handleUpdateBtnDisabled() ? "Green" : "Red"
+                  }
                   ml={2}
                 />
                 <TodoActionButton
                   id={todo.id}
                   edit={todo.edit}
-                  handleOnClick={handleUpdateTodo}
-                  text={<CheckIcon />}
+                  text={<CloseIcon />}
+                  btnBgColor={"red"}
+                  handleOnClick={handleEditTodo}
                   todoArray={todos}
-                  handleDisabled={handleUpdateBtnDisabled}
-                  btnBgColor={"Green"}
+                  handleDisabled={() => !handleUpdateBtnDisabled()}
                 />
+                <Box
+                  as="button"
+                  borderRadius="md"
+                  bg={handleUpdateBtnDisabled() ? "Gray" : "Green"}
+                  color="white"
+                  px={2}
+                  h={8}
+                  ml={3}
+                  disabled={handleUpdateBtnDisabled()}
+                >
+                  {<CheckIcon />}
+                </Box>
               </form>
             </>
           ) : (
@@ -121,7 +141,7 @@ export const ShowTodoList = ({ handleButtonDisabled }: ShowTodoListProps) => {
                 id={todo.id}
                 edit={todo.edit}
                 text={<DeleteIcon />}
-                btnBgColor={"red"}
+                btnBgColor={"Red"}
                 handleOnClick={handleDeleteTodo}
                 todoArray={todos}
                 handleDisabled={handleButtonDisabled}
